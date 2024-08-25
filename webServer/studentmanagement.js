@@ -100,7 +100,7 @@ app.get("/Book/GetById/:id", (req, res) => {
   mysqlConnection.query(
     `SELECT * FROM Books WHERE Id = ${id}`,
     function (err, result, fields) {
-      return res.send(err ? err : result);
+      return res.send(err ? err : result[0]);
     }
   );
 });

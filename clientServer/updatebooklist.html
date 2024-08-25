@@ -14,22 +14,22 @@
     <title>Create Book List</title>
   </head>
   <body>
-    <form id="updatebookform">
+    <form id="updateBookForm">
       <div class="row">
         <div class="col-sm-3">
           <label>Book Name</label>
-          <input type="text" name="bookName" class="form-control" />
+          <input  type="text" name="BookName" class="form-control" />
         </div>
         <div class="col-sm-3">
           <label>Author</label>
-          <input type="text" name="author" class="form-control" />
+          <input type="text" name="Author" class="form-control" />
         </div>
         <div class="col-sm-3">
           <label>Publisher</label>
-          <input type="text" name="publisher" class="form-control" />
+          <input type="text" name="Publisher" class="form-control" />
         </div>
       </div>
-      <button type="button" id="updatebookid" class="btn btn-success">
+      <button type="button" id="updateBookId" class="btn btn-success">
         Update
       </button>
       <a href="Booklist.html" class="btn btn-success">Go Back</a>
@@ -38,23 +38,29 @@
 </html>
 
 <script>
+
+const updateFormData = (response) => {
+    $('input[name="BookName"]').val(response.BookName);
+    $('input[name="Author"]').val(response.Author);
+    $('input[name="Publisher"]').val(response.Publisher);
+  };
+
   const currentBookId = () => {
     const url = new URL(window.location.href);
     const userId = url.searchParams.get("id");
     return userId;
   };
-  const getbook = () => {
-    const id = currentBookId();
-    console.log(id);
 
+  const getBookById = () => {
+    const id = currentBookId();
     $.ajax({
       url: "http://localhost:3000/Book/GetById/" + id,
       method: "get",
       success: function (result) {
-        console.log(result);
+        updateFormData(result);
       },
       error: function (error) {
-        console.log(error);
+        console.error(error);
       },
     });
   };
@@ -66,15 +72,14 @@
       data: JSON.stringify(data),
       contentType: "application/json",
       success: (result) => {
-        console.log(result);
         alert("Successfully data updated");
         window.location.href = "Booklist.html";
       },
     });
   };
-  $("#updatebookid").click(function (e) {
+  $("#updateBookId").click(function (e) {
     e.preventDefault();
-    const form = document.getElementById("updatebookform");
+    const form = document.getElementById("updateBookForm");
     const formEntries = new FormData(form).entries();
     const formData = Object.assign(
       ...Array.from(formEntries, ([name, value]) => ({ [name]: value }))
@@ -85,6 +90,6 @@
   });
 
   $(document).ready(function () {
-    getbook();
+    getBookById();
   });
 </script>
