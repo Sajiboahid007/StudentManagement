@@ -38,7 +38,7 @@
             <td>${data?.Author}</td>
             <td>${data?.Publisher}</td>
             <td>
-                <button type = "button" class="btn btn-primary">Edit</button>
+                <a href = "./updatebooklist.html?id=${data.Id}" type = "button" class="btn btn-primary">Edit</a>
                 <button type = "button" class="btn btn-danger canDelete" bookId = "${data.Id}" id = "${data.Id}" >Delete</button>
             </td>
         </tr>`;

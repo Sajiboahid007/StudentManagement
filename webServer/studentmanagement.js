@@ -40,7 +40,7 @@ app.get("/student/GetById/:id", (req, res) => {
   mysqlConnection.query(
     `SELECT * FROM students WHERE Id = ${id}`,
     function (err, result, fields) {
-      return res.send(err ? err : result);
+      return res.send(err ? err : result[0]);
     }
   );
 });
