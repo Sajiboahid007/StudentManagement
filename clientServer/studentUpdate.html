@@ -53,7 +53,6 @@
     $('input[name="Age"]').val(response.Age);
     $('input[name="DepartmentName"]').val(response.DepartmentName);
     $('input[name="Email"]').val(response.Email);
-    console.log(response);
   };
   const getCurrentUrlId = () => {
     // Get the current URL
@@ -71,7 +70,6 @@
       url: "http://localhost:3000/student/GetById/" + id,
       method: "get",
       success: function (result) {
-        console.log(result);
         updateFormData(result);
       },
       error: function (error) {
@@ -105,7 +103,6 @@
       `http://localhost:3000/student/Update/${getCurrentUrlId()}`,
       formData
     );
-    console.log(formData);
   });
   $(document).ready(function () {
     getStudent();

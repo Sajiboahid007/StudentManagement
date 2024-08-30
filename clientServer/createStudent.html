@@ -40,37 +40,39 @@
           <button type="button" id="createStudentBtn" class="btn btn-danger">
             Save
           </button>
-          <a href="studentList.html" class="btn btn-success">Go Back</a>
+          <a href="./sidedbar.html" class="btn btn-success">Go Back</a>
         </div>
       </div>
     </form>
   </body>
 </html>
 <script>
-  const saveStudent = (url, data) => {
-    $.ajax({
-      url: url,
-      method: "post",
-      data: JSON.stringify(data),
-      contentType: "application/json",
-      success: function (result) {
-        alert("Data saved");
-        window.location.href = "./studentList.html";
-      },
-      error: function (error) {
-        alert("Data not saved");
-      },
+  (function () {
+    const saveStudent = (url, data) => {
+      $.ajax({
+        url: url,
+        method: "post",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (result) {
+          alert("Data saved");
+          window.location.href = "./studentList.html";
+        },
+        error: function (error) {
+          alert("Data not saved");
+        },
+      });
+    };
+
+    $("#createStudentBtn").click(function (e) {
+      e.preventDefault();
+      const form = document.getElementById("createStudentForm");
+      const formEntries = new FormData(form).entries();
+      const formData = Object.assign(
+        ...Array.from(formEntries, ([name, value]) => ({ [name]: value }))
+      );
+
+      saveStudent("http://localhost:3000/student/Save", formData);
     });
-  };
-
-  $("#createStudentBtn").click(function (e) {
-    e.preventDefault();
-    const form = document.getElementById("createStudentForm");
-    const formEntries = new FormData(form).entries();
-    const formData = Object.assign(
-      ...Array.from(formEntries, ([name, value]) => ({ [name]: value }))
-    );
-
-    saveStudent("http://localhost:3000/student/Save", formData);
-  });
+  })();
 </script>

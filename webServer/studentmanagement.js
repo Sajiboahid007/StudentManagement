@@ -69,7 +69,6 @@ app.put("/student/Update/:id", (req, res) => {
 
 app.post("/student/Save", (req, res) => {
   const data = req?.body;
-  console.log(data);
   // res.send(data);
   mysqlConnection.query(
     "INSERT INTO students SET ?",

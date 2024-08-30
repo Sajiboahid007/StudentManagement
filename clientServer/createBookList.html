@@ -60,7 +60,6 @@
     const formData = Object.assign(
       ...Array.from(formEntries, ([name, value]) => ({ [name]: value }))
     );
-    console.log(formData);
     saveBookList("http://localhost:3000/Book/Save", formData);
   });
 </script>

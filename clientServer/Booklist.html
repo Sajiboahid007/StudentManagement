@@ -1,39 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- //ajax cdn -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Book List</title>
-  </head>
-  <body>
-    <a href="createBookList.html" class="btn btn-success">Add Book</a>
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Book Name</th>
-          <th>Author</th>
-          <th>Publisher</th>
-        </tr>
-      </thead>
-      <tbody id="bookId"></tbody>
-    </table>
-  </body>
-</html>
+<a href="createBookList.html" class="btn btn-success">Add Book</a>
+<br />
+<br />
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Book Name</th>
+      <th>Author</th>
+      <th>Publisher</th>
+    </tr>
+  </thead>
+  <tbody id="bookId"></tbody>
+</table>
 
 <script>
-  const bookListUrl = "http://localhost:3000/Book/GetAll";
-  const viewData = (response) => {
-    let updateHtml = "";
-    response.forEach((data) => {
-      updateHtml += `<tr>
+  (function () {
+    const bookListUrl = "http://localhost:3000/Book/GetAll";
+    const viewData = (response) => {
+      let updateHtml = "";
+      response.forEach((data) => {
+        updateHtml += `<tr>
             <td>${data?.BookName}</td>
             <td>${data?.Author}</td>
             <td>${data?.Publisher}</td>
@@ -42,44 +27,43 @@
                 <button type = "button" class="btn btn-danger canDelete" bookId = "${data.Id}" id = "${data.Id}" >Delete</button>
             </td>
         </tr>`;
+      });
+      $("#bookId").html(updateHtml);
+    };
+
+    const getBookList = (url) => {
+      $.ajax({
+        url: url,
+        method: "get",
+        success: function (response) {
+          viewData(response);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    };
+
+    const bookdelete = (url) => {
+      $.ajax({
+        url: url,
+        method: "delete",
+        success: function (response) {
+          alert("Successfully delete data from BOOK list");
+          getBookList(bookListUrl);
+        },
+        error: function (error) {},
+      });
+    };
+
+    $(document).on("click", ".canDelete", function () {
+      const bookId = $(this).attr("bookId");
+      const url = "http://localhost:3000/deleteBook/" + bookId;
+      bookdelete(url);
     });
-    $("#bookId").html(updateHtml);
-  };
 
-  const getBookList = (url) => {
-    $.ajax({
-      url: url,
-      method: "get",
-      success: function (response) {
-        console.log(response);
-        viewData(response);
-      },
-      error: function (error) {
-        console.log(error);
-      },
+    $(document).ready(function () {
+      getBookList(bookListUrl);
     });
-  };
-
-  const bookdelete = (url) => {
-    $.ajax({
-      url: url,
-      method: "delete",
-      success: function (response) {
-        console.log(response);
-        alert("Successfully delete data from BOOK list");
-        getBookList(bookListUrl);
-      },
-      error: function (error) {},
-    });
-  };
-
-  $(document).on("click", ".canDelete", function () {
-    const bookId = $(this).attr("bookId");
-    const url = "http://localhost:3000/deleteBook/" + bookId;
-    bookdelete(url);
-  });
-
-  $(document).ready(function () {
-    getBookList(bookListUrl);
-  });
+  })();
 </script>

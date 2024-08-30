@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-sm-3">
           <label>Book Name</label>
-          <input  type="text" name="BookName" class="form-control" />
+          <input type="text" name="BookName" class="form-control" />
         </div>
         <div class="col-sm-3">
           <label>Author</label>
@@ -38,8 +38,7 @@
 </html>
 
 <script>
-
-const updateFormData = (response) => {
+  const updateFormData = (response) => {
     $('input[name="BookName"]').val(response.BookName);
     $('input[name="Author"]').val(response.Author);
     $('input[name="Publisher"]').val(response.Publisher);
@@ -85,7 +84,8 @@ const updateFormData = (response) => {
       ...Array.from(formEntries, ([name, value]) => ({ [name]: value }))
     );
     updateBook(
-      `http://localhost:3000/Book/Update/${(currentBookId(), formData)}`
+      `http://localhost:3000/Book/Update/${currentBookId()}`,
+      formData
     );
   });
 

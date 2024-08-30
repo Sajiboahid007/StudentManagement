@@ -11,13 +11,80 @@
 
     <!-- //ajax cdn -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Book in hand</title>
+    <title>Create Book List</title>
   </head>
   <body>
-    <thead>
-      <tr>
-        <td></td>
-      </tr>
-    </thead>
+    <form id="updatebookform">
+      <div class="row">
+        <div class="col-sm-3">
+          <label>Book Name</label>
+          <input type="text" name="bookName" class="form-control" />
+        </div>
+        <div class="col-sm-3">
+          <label>Author</label>
+          <input type="text" name="author" class="form-control" />
+        </div>
+        <div class="col-sm-3">
+          <label>Publisher</label>
+          <input type="text" name="publisher" class="form-control" />
+        </div>
+      </div>
+      <button type="button" id="updatebookid" class="btn btn-success">
+        Update
+      </button>
+      <a href="Booklist.html" class="btn btn-success">Go Back</a>
+    </form>
   </body>
 </html>
+
+<script>
+  const currentBookId = () => {
+    const url = new URL(window.location.href);
+    return url.searchParams.get("id");
+  };
+
+  const getBook = () => {
+    const id = currentBookId();
+
+    $.ajax({
+      url: "http://localhost:3000/Book/GetById/" + id,
+      method: "get",
+      success: function (result) {
+        // Populate form fields with the fetched data
+        $('input[name="bookName"]').val(result.bookName);
+        $('input[name="author"]').val(result.author);
+        $('input[name="publisher"]').val(result.publisher);
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  };
+
+  const updateBook = (url, data) => {
+    $.ajax({
+      url: url,
+      method: "put",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      success: (result) => {
+        alert("Successfully updated data");
+        window.location.href = "Booklist.html";
+      },
+      error: function (err) {
+        console.error(err);
+      },
+    });
+  };
+
+  $("#updatebookid").click(function (e) {
+    e.preventDefault();
+    const form = document.getElementById("updatebookform");
+    const formData = Object.fromEntries(new FormData(form).entries());
+
+    const url = `http://localhost:3000/Book/Update/${currentBookId()}`;
+    updateBook(url, formData);
+  });
+
+  $(document).ready(getBook);
+</script>
